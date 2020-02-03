@@ -8,38 +8,51 @@
 #include <misc.h>
 #include <entry.h>
 
-include spede.h kernel.h proc.h misc.h entry.h
+void TimerService(tf_t *trapframe)
+{
+	outportb(PIC_CONTROL_REG, TIMER_ACK);
 
-program a void-returning function TimerService which receives
-an argument that is the type: tf_t * {
-   save tf_p to the PCB of cur_pid
+	trapframe = pcb[cur_pid].tf_p;
+	char ch;
 
-   if cons_kbhit():
-      read in the character
-      if it's 'g' goto GDB
+	
+	if (cont_kbhit())
+	
+	{
+		ch = cons_getchar();
+		if (ch == 'g') breakpoint();
+	}	
+	
+	++sys_tick;
+	++pcb[cur_pid].run_tick;
+	++pcb[cur_pid].total_tick;
 
-   ACK to PIC the timer event (like phase 0)
+	if (pcb[cur_pid].run_tick == TIME_SIZE)
+	{
+		EnQ(cur_pid, &ready_q);
+		pcb[cur_pid].state = READY;
+		cur_pid = -1;
+	}		
 
-   increment sys_tick by 1
-   increment both run_tick and total_tick by 1 in the PCB of cur_pid
+	if (cur_pid == -1)
+	{
+		Swapper(); //not sure if this is correct syntax
+	}
 
-   if its run_tick equals TIME_SIZE:
-      move/append cur_pid to ready_q
-      alter/downgrade its state
-      clear cur_pid to become NA
-   }
-
-   if cur_pid is NA call Swapper() to find one
-   call Loader with the tf_p of cur_pid
 }
 
-program a void-returning function Swapper that takes no argument {
-   if ready_q is empty:
-      cons_printf("Kernel: panic, no more process ready to run!\n");
-      goto GDB
+void Swapper()
+{
+	if (QisEmpty(&ready_q))
+	{
+		cons_printf("Kernel: panic, no more processes ready to run!\n");		breakpoint();
+	}
 
-   set cur_pid to a PID dequeued from ready_q
-   clear run_tick of the new cur_pid
-   set the state of cur_pid to RUN
+	else
+	{
+		cur_pid = DeQ(&ready_q);
+		pcb[cur_pid].run_tick = 0;
+		pcb[cur_pid].state = RUN;
+`	}				
 }
 

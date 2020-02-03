@@ -52,8 +52,7 @@ void main(void) {                   // kernel boots
 	outportb(PIC_MASK_REG, PIC_MASK);
 
 	
-
-   call CreateProc() to create the Clock process
+	CreateProc(Clock);
 
 	cur_pid = 0;
 
