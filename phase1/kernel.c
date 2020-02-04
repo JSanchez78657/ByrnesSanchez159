@@ -14,10 +14,8 @@ void TimerService(tf_t *trapframe)
 
 	trapframe = pcb[cur_pid].tf_p;
 	char ch;
-
 	
 	if (cont_kbhit())
-	
 	{
 		ch = cons_getchar();
 		if (ch == 'g') breakpoint();
@@ -53,6 +51,6 @@ void Swapper()
 		cur_pid = DeQ(&ready_q);
 		pcb[cur_pid].run_tick = 0;
 		pcb[cur_pid].state = RUN;
-`	}				
+	}				
 }
 
