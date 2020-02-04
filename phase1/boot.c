@@ -31,7 +31,7 @@ void CreateProc(func_p_t funEntry)
 	Bzero(pcb[next].tf_p, sizeof(tf_t));
 	
 	pcb[next].tf_p->efl = 0;
-	pcb[next].tf_p->cs = stack[next];
+	pcb[next].tf_p->cs = get_cs();
 	pcb[next].tf_p->eip = funEntry;
 }
 
