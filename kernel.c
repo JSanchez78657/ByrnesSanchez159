@@ -36,7 +36,7 @@ void TimerService(tf_t *trapframe)
 
 	if (cur_pid == -1)
 	{
-		Swapper(); //not sure if this is correct syntax
+		Swapper();
 	}
 
 }
