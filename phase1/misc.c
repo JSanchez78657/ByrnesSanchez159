@@ -21,10 +21,9 @@ int DeQ(q_t *myQ)
 		++myQ->head;
 		--myQ->size;
 	}
-
 	else
 	{
-		return NULL;
+		return 0;
 	}
 }
 
@@ -46,7 +45,8 @@ void EnQ(int pid, q_t *myQ)
 
 void Bzero(char *myChar, unsigned nBytes)
 {
-	for (int i = 0; i < nBytes; i++)
+        int i;
+	for (i = 0; i < nBytes; i++)
 	{
 		myChar[i] = NULL;
 	}
@@ -55,7 +55,8 @@ void Bzero(char *myChar, unsigned nBytes)
 
 void MemCpy(char *source, char *dest, unsigned nBytes)
 {
-	for (int i = 0; i < nBytes; i++)
+        int i;
+	for (i = 0; i < nBytes; i++)
 	{
 		dest[i] = source[i];
 	}

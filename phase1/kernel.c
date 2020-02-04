@@ -10,12 +10,12 @@
 
 void TimerService(tf_t *trapframe)
 {
+	char ch;
 	outportb(PIC_CONTROL_REG, TIMER_ACK);
 
 	trapframe = pcb[cur_pid].tf_p;
-	char ch;
 	
-	if (cont_kbhit())
+	if (cons_kbhit())
 	{
 		ch = cons_getchar();
 		if (ch == 'g') breakpoint();

@@ -11,7 +11,7 @@
 
 // prototype any subroutines of Clock() here
 void itos(int, char*);
-int strlen(char*);
+int str_len(char*);
 
 void Clock() {
    int tick = 0;
@@ -22,10 +22,10 @@ void Clock() {
 //   an infinite loop:
    while(1) {
 //      if sys_tick is now at a new second
-      if(sys_tick % CLK_TICK == 0) {
+      if(sys_tick % CLK_TCK == 0) {
          ++tick;
 //         convert the current second count number to str
-         str = itos(tick);
+         itos(tick, str);
 //         set p to VIDEO_START (1st row, 1st column)
          p = VIDEO_START;
 //         advance p by 75 columns (to the right, on the same row)
@@ -34,6 +34,8 @@ void Clock() {
 //            *p = the character + VIDEO_MASK
          for(i = 0; i < STRWIDTH; ++i)
             *p = str[i] + VIDEO_MASK;
+      }
+   }
 }
 
 // Program a void-return function:
@@ -41,7 +43,8 @@ void Clock() {
 // to the string.
 void itos(int i, char* s) {
     //Start at the end of the string, on the character before '\0'
-    int h = strlen(s) - 1;
+    int h;
+    h = str_len(s) - 1;
     //Grab the last number of the integer, put it in the current position of the string, then move it left.
     for(; i > 0; i /= 10)
         s[h--] = '0' + (i % 10);
@@ -50,7 +53,7 @@ void itos(int i, char* s) {
 // Program an integer-return function:
 // given a string, the function counts up the length of the string
 // and returns it.
-int strlen(char* s) {
+int str_len(char* s) {
    int i;
    for(i = 0; s[i] != '\0'; ++i);
    return i;

@@ -16,7 +16,7 @@ char stack[PROC_SIZE][STACK_SIZE];
 q_t unused_q, ready_q;
 
 unsigned int sys_tick;
-struct 1386_gate *intr_table;
+struct i386_gate *intr_table;
 
 void CreateProc(func_p_t funEntry)
 {
@@ -28,23 +28,24 @@ void CreateProc(func_p_t funEntry)
 	pcb[next].total_tick = 0;
 	pcb[next].state = READY;
 	
-	Bzero(pcb[next].tf_p, sizeof(tf_t));
+	Bzero((char*) pcb[next].tf_p, sizeof(tf_t));
 	
 	pcb[next].tf_p->efl = 0;
 	pcb[next].tf_p->cs = get_cs();
-	pcb[next].tf_p->eip = funEntry;
+	pcb[next].tf_p->eip = (unsigned) &funEntry;
 }
 
 void main(void) {                   // kernel boots
+        int i;
 	sys_tick = 0;
 	intr_table = (struct i386_gate *) INTR_TABLE;
 
-	Bzero(unused_q, sizeof(q_t));
-	Bzero(ready_q, sizeof(q_t));
+	Bzero((char *) &unused_q, sizeof(q_t));
+	Bzero((char *) &ready_q, sizeof(q_t));
 
-	for (int i = 0; i < PROC_SIZE; i++)
+	for (i = 0; i < PROC_SIZE; i++)
 	{
-		EnQ(i, unused_q);
+		EnQ(i, &unused_q);
 	}
 	
 	fill_gate(&intr_table[TIMER], (int)TimerEntry, get_cs(), ACC_INTR_GATE, 0);
@@ -56,5 +57,5 @@ void main(void) {                   // kernel boots
 
 	cur_pid = 0;
 
-	Loader();
+	Loader(pcb[0].tf_p); //I'm not sure if this is correct, just a guess.
 }
