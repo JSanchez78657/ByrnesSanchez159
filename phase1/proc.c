@@ -3,8 +3,8 @@
 // processes do not R/W kernel data or call kernel code, only via syscalls
 
 // include spede.h and kernel.h
-#include <spede.h>
-#include <kernel.h>
+#include "spede.h"
+#include "kernel.h"
 
 #define CORNER 75
 #define STRWIDTH 4

@@ -1,7 +1,7 @@
 // misc.c, 159
 
-#include <spede.h>
-#include <kernel.h>
+#include "spede.h"
+#include "kernel.h"
 
 int QisEmpty(q_t *myQ)
 {

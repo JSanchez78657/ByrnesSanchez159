@@ -2,17 +2,17 @@
 //
 // Team Name: ??????? (Members: ??????...)
 
-#include <spede.h>
-#include <kernel.h>
-#include <entry.h>
-#include <misc.h>
-#include <proc.h>
+#include "spede.h"
+#include "kernel.h"
+#include "entry.h"
+#include "misc.h"
+#include "proc.h"
 
 // kernel data are all declared here (prototyped in kernel.h):
 
 int cur_pid;
 pcb_t pcb[PROC_SIZE];
-char stack[PROC_SIZE][STACK_SIZE]
+char stack[PROC_SIZE][STACK_SIZE];
 q_t unused_q, ready_q;
 
 unsigned int sys_tick;
