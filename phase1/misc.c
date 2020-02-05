@@ -20,6 +20,7 @@ int DeQ(q_t *myQ)
 		int temp = myQ->q[myQ->head];
 		++myQ->head;
 		--myQ->size;
+		return temp;
 	}
 	else
 	{
@@ -48,7 +49,7 @@ void Bzero(char *myChar, unsigned nBytes)
         int i;
 	for (i = 0; i < nBytes; i++)
 	{
-		myChar[i] = NULL;
+		myChar[i] =0;
 	}
 }
 
