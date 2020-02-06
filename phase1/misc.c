@@ -5,12 +5,12 @@
 
 int QisEmpty(q_t *myQ)
 {
-	return (myQ->size == 0) ? 1 : 0;
+	return (myQ->size == 0) ? TRUE : FALSE;
 }
 
 int QisFull(q_t *myQ)
 {
-	return (myQ->size == 20) ? 1 : 0;
+	return (myQ->size == 20) ? TRUE : FALSE;
 }
 
 int DeQ(q_t *myQ)
@@ -34,7 +34,7 @@ void EnQ(int pid, q_t *myQ)
 	if (!QisFull(myQ))
 	{
 		++myQ->size;
-		myQ->q[myQ->tail++] = pid;
+		myQ->q[(myQ->tail++) % Q_SIZE] = pid;
 	}
 
 	else

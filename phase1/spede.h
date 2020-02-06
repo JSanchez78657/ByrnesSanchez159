@@ -12,6 +12,7 @@
 #include <spede/machine/seg.h> // struct i386_gate, fill_gate(), etc.
 #include <spede/machine/asmacros.h> // ASM(), CNAME(), ENTRY(), etc.
 #include <spede/machine/rs232.h>    // for serial ports
+#include <spede/stdlib.h>
 
 #endif
 

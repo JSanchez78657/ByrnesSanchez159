@@ -21,13 +21,14 @@ void Clock() {
 
 //   an infinite loop:
    while(1) {
+	cons_printf("Clock:%d", sys_tick);
 //      if sys_tick is now at a new second
       if(sys_tick % CLK_TCK == 0) {
          ++tick;
 //         convert the current second count number to str
          itos(tick, str);
 //         set p to VIDEO_START (1st row, 1st column)
-         p = VIDEO_START;
+         p = (unsigned short *)VIDEO_START;
 //         advance p by 75 columns (to the right, on the same row)
          p += CORNER;
 //         loop thru each char in str:
@@ -44,6 +45,7 @@ void Clock() {
 void itos(int i, char* s) {
     //Start at the end of the string, on the character before '\0'
     int h;
+	cons_printf("itos");
     h = str_len(s) - 1;
     //Grab the last number of the integer, put it in the current position of the string, then move it left.
     for(; i > 0; i /= 10)
@@ -54,7 +56,8 @@ void itos(int i, char* s) {
 // given a string, the function counts up the length of the string
 // and returns it.
 int str_len(char* s) {
-   int i;
+	int i;
+	cons_printf("str_len");
    for(i = 0; s[i] != '\0'; ++i);
    return i;
 }

@@ -11,9 +11,8 @@
 void TimerService(tf_t *trapframe)
 {
 	char ch;
-	outportb(PIC_CONTROL_REG, TIMER_ACK);
-
-	trapframe = pcb[cur_pid].tf_p;
+	cons_printf("in timer service");
+	pcb[cur_pid].tf_p = trapframe;
 	
 	if (cons_kbhit())
 	{
@@ -21,21 +20,27 @@ void TimerService(tf_t *trapframe)
 		if (ch == 'g') breakpoint();
 	}	
 	
+	outportb(PIC_CONTROL_REG, TIMER_ACK);
+	
 	++sys_tick;
 	++pcb[cur_pid].run_tick;
 	++pcb[cur_pid].total_tick;
 
 	if (pcb[cur_pid].run_tick == TIME_SIZE)
 	{
-		EnQ(cur_pid, &ready_q);
+		cons_printf("TIME_SIZE");
 		pcb[cur_pid].state = READY;
+		EnQ(cur_pid, &ready_q);
 		cur_pid = -1;
 	}		
 
 	if (cur_pid == -1)
 	{
+		cons_printf("swapper");
 		Swapper();
 	}
+
+	Loader(pcb[cur_pid].tf_p);
 
 }
 
