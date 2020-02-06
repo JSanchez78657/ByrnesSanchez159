@@ -12,31 +12,20 @@
 // prototype any subroutines of Clock() here
 void itos(int, char*);
 int str_len(char*);
+void display(int, char*);
 
 void Clock() {
-   int tick = 0;
-   int i;
+   int second = 0;
+   int last_tick = 0;
    char str[] = "    ";  // str for 4-digits, plus NUL
-   unsigned short *p;
-
+   display(second, str);
 //   an infinite loop:
-   while(1) {
-	cons_printf("Clock:%d", sys_tick);
+   while(1) 
 //      if sys_tick is now at a new second
-      if(sys_tick % CLK_TCK == 0) {
-         ++tick;
-//         convert the current second count number to str
-         itos(tick, str);
-//         set p to VIDEO_START (1st row, 1st column)
-         p = (unsigned short *)VIDEO_START;
-//         advance p by 75 columns (to the right, on the same row)
-         p += CORNER;
-//         loop thru each char in str:
-//            *p = the character + VIDEO_MASK
-         for(i = 0; i < STRWIDTH; ++i)
-            *p = str[i] + VIDEO_MASK;
+      if(sys_tick != last_tick && sys_tick % CLK_TCK == 0) {
+         last_tick = sys_tick;
+         display(++second, str);
       }
-   }
 }
 
 // Program a void-return function:
@@ -45,10 +34,10 @@ void Clock() {
 void itos(int i, char* s) {
     //Start at the end of the string, on the character before '\0'
     int h;
-	cons_printf("itos");
     h = str_len(s) - 1;
     //Grab the last number of the integer, put it in the current position of the string, then move it left.
-    for(; i > 0; i /= 10)
+    if(i == 0) s[h] = '0';
+    else for(; i > 0; i /= 10) 
         s[h--] = '0' + (i % 10);
 }
 
@@ -56,8 +45,22 @@ void itos(int i, char* s) {
 // given a string, the function counts up the length of the string
 // and returns it.
 int str_len(char* s) {
-	int i;
-	cons_printf("str_len");
+   int i;
    for(i = 0; s[i] != '\0'; ++i);
    return i;
+}
+
+void display(int num, char* str) {
+   unsigned short *p;
+   unsigned i;
+//         convert the current second count number to str
+   itos(num, str);
+//         set p to VIDEO_START (1st row, 1st column)
+   p = (unsigned short *)VIDEO_START;
+//         advance p by 75 columns (to the right, on the same row)
+   p += CORNER;
+//         loop thru each char in str:
+//            *p = the character + VIDEO_MASK
+   for(i = 0; i < STRWIDTH; ++i)
+      *(p + i) = str[i] + VIDEO_MASK;
 }
