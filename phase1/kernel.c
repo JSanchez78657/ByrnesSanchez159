@@ -1,6 +1,6 @@
 // kernel.c, 159, phase 1
 //
-// Team Name: ??????? (Members: ??????...)
+// Team Name: TACOS (Members: Jeff Byrnes, Joel Sanchez)
 
 #include "spede.h"
 #include "kernel.h"
@@ -17,7 +17,7 @@ void TimerService(tf_t *trapframe)
 	{
 		ch = cons_getchar();
 		if (ch == 'g') breakpoint();
-                if (ch == 'x') exit(0); //Remove this before submitting. It's just used for exiting faster.
+               // if (ch == 'x') exit(0); //Remove this before submitting. It's just used for exiting faster.
 	}	
 	
 	outportb(PIC_CONTROL_REG, TIMER_ACK);

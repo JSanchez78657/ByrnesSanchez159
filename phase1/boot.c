@@ -1,6 +1,6 @@
 // boot.c, 159, phase 1
 //
-// Team Name: ??????? (Members: ??????...)
+// TACOS  (Members: Jeff Byrnes, Joel Sanchez)
 
 #include "spede.h"
 #include "kernel.h"
@@ -23,7 +23,6 @@ void CreateProc(func_p_t funEntry)
  	int next = DeQ(&unused_q);  
 	EnQ(next, &ready_q);
 
-	//stack[next] = malloc((size_t)STACK_SIZE);
 	Bzero(stack[next], STACK_SIZE);	
 	pcb[next].run_tick = 0;
 	pcb[next].total_tick = 0;
@@ -42,9 +41,6 @@ void main(void) {                   // kernel boots
 	sys_tick = 0;
 	intr_table = (struct i386_gate *) INTR_TABLE;
 
-	//Bzero((char *) &unused_q, sizeof(q_t));
-	//Bzero((char *) &ready_q, sizeof(q_t));
-	//
 	
 	unused_q.head = unused_q.tail = unused_q.size = 0;
 	ready_q.head = ready_q.tail = ready_q.size = 0;
@@ -63,5 +59,5 @@ void main(void) {                   // kernel boots
 
 	cur_pid = 0;
 
-	Loader(pcb[cur_pid].tf_p); //I'm not sure if this is correct, just a guess.
+	Loader(pcb[cur_pid].tf_p); 
 }
