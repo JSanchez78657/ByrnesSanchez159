@@ -54,12 +54,3 @@ void Bzero(char *myChar, unsigned nBytes)
 	}
 }
 
-
-void MemCpy(char *source, char *dest, unsigned nBytes)
-{
-        int i;
-	for (i = 0; i < nBytes; i++)
-	{
-		dest[i] = source[i];
-	}
-}
