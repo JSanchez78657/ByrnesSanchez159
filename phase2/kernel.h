@@ -20,6 +20,8 @@
 #define TIMER_ACK 0x60         // control code sent to PIC
 #define VIDEO_MASK 0x0f00      // bold white on black
 #define VIDEO_START 0xb8000    // upper-left corner
+#define CORNER 80
+#define ROWS 25
 
 // system limit stuff
 #define TIME_SIZE 100          // max timer count, then rotate process

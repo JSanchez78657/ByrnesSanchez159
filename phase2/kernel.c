@@ -1,80 +1,3 @@
-// kernel.c
-
-/*
-...
-
-void-returning TimerService has an argument: tf_t *tf_p {
-   ... 1st save tf_p ...
-   if the keyboard on the PC is pressed {
-      get the key
-      if it's 'g,' goto GDB
-      if keyboard wait queue is not empty: call KbService with the key as argument
-   }
-   ... rest unchanged ...
-}
-
-...
-
-void-returning GetTimeService with an argument: tf_t *tf_p {
-   copy current second # to 'eax' in the TF that tf_p points to
-   call Loader with tf_p as the argument to (resume the same process)
-}
-
-void-returning WriteService with an input argument: tf_t *tf_p {
-   the address of the str to print is given in 'eax' of the TF
-   that tf_p points to
-
-   for each char in the string (that's not NUL) {
-      call WriteChar with that char as the argument
-      advance the string pointer
-   }
-
-   call Loader with tf_p as the argument to (resume the same process)
-}
-
-void-returning WriteChar that's given a char as its argument: {
-   declare: static unsigned short *cursor with value = (typecast) VIDEO_START
-
-   if ch is neither CR or NL {   // if it's a regular character
-      apply pointer 'cursor' to display the character passed over
-      advance 'cursor'
-   } else {         // the character to display is a CR or NL
-      judging from 'cursor,' calculate how many columns are left in current row
-      then in a loop, show that many spaces (to mimic erasing to end of line)
-   }
-
-   if 'cursor' reaches bottom-right on screen, set it back to top-left
-}
-
-void-returning ReadService with an argument: tf_t *tf_p {
-   save tf_p to the PCB of the currently-running process
-
-   move current PID to the wait queue of the keyboard
-   alter its state to WAIT
-   current PID becomes NA
-
-   call Swapper to find another process to run
-   call Loader to load the TF of the newly selected current PID to run it
-}
-
-// lower half of ReadService, called by TimerService()
-void-returning KbService with a given character as argument {
-   call WriteChar with the character to echo/display it
-
-   if the character is not CR {          // DOS uses CR
-      call StrAdd to add it to the keyboard buffer  // save it
-   } else {
-      call StrAdd to add a NUL to the keyboard buffer
-      realease the process by dequeuing PID from the keyboard wait queue
-      the string space is pointed to by 'eax' of the process TF
-      call StrCpy to copy the keyboard.buffer to the process string space
-      alter the released process state to READY
-      move it to the ready queue
-      clear/empty the keyboard buffer
-   }
-=======
-*/
-
 // kernel.c, 159, phase 2
 //
 // Team Name: TACOS (Members: Jeff Byrnes, Joel Sanchez)
@@ -94,6 +17,11 @@ void TimerService(tf_t *trapframe)
 	{
 		ch = cons_getchar();
 		if (ch == 'g') breakpoint();
+		else if (kb.wait_q.size != 0)
+		{
+			KbService(ch);
+		}
+		//what happens q.size == 0?
 	}	
 	
 	outportb(PIC_CONTROL_REG, TIMER_ACK);
@@ -117,6 +45,86 @@ void TimerService(tf_t *trapframe)
 	Loader(pcb[cur_pid].tf_p);
 
 }
+
+
+void GetTimeService(tf_t *tf_p)
+{
+	tf_p->eax = sys_tick / 100;	
+	Loader(tf_p);
+}
+
+
+void WriteService(tf_t *tf_p)
+{
+	char *ch = tf_p->eax;
+	while (*ch)
+	{
+		WriteChar(*ch);
+		ch++
+	}	
+	Loader(tf_p);
+}
+
+
+void WriteChar(char ch)
+{
+
+	static unsigned *cursor = (unsigned *) VIDEO_START;
+	if ((ch != CR) && (ch != NL))
+	{
+		*cursor = ch + VIDEO_MASK;
+		++cursor;
+	}
+	else
+	{
+		for ( ; cursor < CORNER; cursor++)
+		{
+			*curosr = ' ' + VIDEO_MASK;	
+		}
+	}
+	if (cursor == (unsigned *)(CORNER * ROWS)
+	{
+		cursor = (unsigned *) VIDEO_START;
+	}
+}
+
+
+void ReadService(tf_t *tf_p)
+{
+	pcb[cur_pid].tf_p = tf_p;
+	
+
+	EnQ(cur_pid, kb.wait_q);
+	pcb[cur_pid].state = WAIT;
+	cur_pid = -1;
+
+	Swapper();
+	Loader(pcb[cur_pid].tf_p);
+	
+}
+
+
+	
+void KbService(char ch)
+{
+	int release_pid;
+
+	WriteChar(ch);
+	if ((ch != CR) && (ch != NL))
+	{
+		StrAdd(kb.buffer, ch);
+	}
+	else
+	{
+		StrAdd(kb.buffer, '\0');
+		release_pid = DeQ(kb.wait_q);
+		StrCpy(kb.buffer, pcb[cur_pid].tf_p->eax);
+		pcb[release_pid].state = READY;
+		EnQ(release_pid, ready_q);
+		Bzero(kb.buffer, STR_SIZE);
+	}
+}
+		
 
 void Swapper()
 {
