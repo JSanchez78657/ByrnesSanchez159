@@ -35,4 +35,28 @@ ENTRY(TimerEntry)           // push efl, cs, eip by hardware
    call CNAME(TimerService) // call C function code
 
 
+ENTRY(GetTimeEntry)
+	pushal
+	movl %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(GetTimeService)
+
+ENTRY(WriteEntry)
+	pushal
+	moval %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(WriteService)
+
+ENTRY(ReadEntry)
+	pushal
+	moval %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(ReadService)
+
 
