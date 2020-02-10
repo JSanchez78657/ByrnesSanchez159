@@ -97,8 +97,14 @@ void itos(int i, char*s) {
 }
 
 void StrAdd(char* str, char c) {
+    int len = str_len(str);
+    str[len] = '\0';
+    str[len-1] = c;
+}
+
+void StrCpy(char* inStr, char* destStr) {
+    int len = str_len(inStr);
     int i;
-    for(i = 0; str[i] != '\0'; ++i);
-    str[i+1] = '\0';
-    str[i] = c;
+    for(i = 0; i < len; ++i)
+        destStr[i] = inStr[i];
 }

@@ -24,6 +24,7 @@ program a void-returning Init that has no input
 #include "spede.h"
 #include "kernel.h"
 #include "misc.h"
+#include "syscall.h"
 
 #define CORNER 75
 #define STRWIDTH 4
@@ -54,3 +55,8 @@ void display(int num, char* str) {
       *(p + i) = str[i] + VIDEO_MASK;
 }
 
+void Init() {
+    int seconds;
+    while(1) {
+        seconds = get_time_call();
+}
