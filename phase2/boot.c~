@@ -69,4 +69,11 @@ void main(void) {                   // kernel boots
 }
 
 
+/*
 
+during the bootstrap:
+
+   add 3 new entries into the intr_table, in the corresponding entries
+   Create process Init (after creating Clock)
+
+*/
