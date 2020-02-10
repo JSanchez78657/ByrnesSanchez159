@@ -57,6 +57,8 @@ void display(int num, char* str) {
 
 void Init() {
     int seconds;
+    char* str;
     while(1) {
         seconds = get_time_call();
+        itos(str, seconds);
 }

@@ -88,7 +88,7 @@ int str_len(char* s) {
     return i;
 }
 
-void itos(int i, char*s) {
+void itos(int i, char* s) {
     int h;
     h = str_len(s) - 1;
     if(i == 0) s[h] = '0';
