@@ -1,6 +1,6 @@
+<<<<<<< HEAD
 // kernel.c
 
-/*
 ...
 
 void-returning TimerService has an argument: tf_t *tf_p {
@@ -73,11 +73,9 @@ void-returning KbService with a given character as argument {
       clear/empty the keyboard buffer
    }
 =======
-*/
-
-// kernel.c, 159, phase 2
+// kernel.c, 159, phase 1
 //
-// Team Name: TACOS (Members: Jeff Byrnes, Joel Sanchez)
+// Team Name: ??????? (Members: ??????...)
 
 #include "spede.h"
 #include "kernel.h"
@@ -94,6 +92,7 @@ void TimerService(tf_t *trapframe)
 	{
 		ch = cons_getchar();
 		if (ch == 'g') breakpoint();
+                if (ch == 'x') exit(0); //Remove this before submitting. It's just used for exiting faster.
 	}	
 	
 	outportb(PIC_CONTROL_REG, TIMER_ACK);
@@ -131,5 +130,6 @@ void Swapper()
 		pcb[cur_pid].run_tick = 0;
 		pcb[cur_pid].state = RUN;
 	}				
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 }
 

@@ -1,4 +1,3 @@
-/*
 // misc.c, 159
 
 add 2 new functions:
@@ -17,8 +16,6 @@ void-returning StrCpy with 2 inputs: both char *, as the source
 and destination of the copy
 make sure the destination copy will also be NUL-delimited
 =======
-
-*/
 #include "spede.h"
 #include "kernel.h"
 

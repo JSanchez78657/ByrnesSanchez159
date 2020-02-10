@@ -1,6 +1,7 @@
 // boot.c, 159, phase 2
 // TACOS  (Members: Jeff Byrnes, Joel Sanchez)
 
+
 #include "spede.h"
 #include "kernel.h"
 #include "entry.h"
@@ -15,6 +16,7 @@ char stack[PROC_SIZE][STACK_SIZE];
 q_t unused_q, ready_q;
 kb_t kb;
 
+
 unsigned int sys_tick;
 struct i386_gate *intr_table;
 
@@ -22,6 +24,7 @@ void CreateProc(func_p_t funEntry)
 {
  	int next = DeQ(&unused_q);  
 	EnQ(next, &ready_q);
+
 
 	Bzero(stack[next], STACK_SIZE);	
 	pcb[next].run_tick = 0;
@@ -41,9 +44,9 @@ void main(void) {                   // kernel boots
 	sys_tick = 0;
 	intr_table = (struct i386_gate *) INTR_TABLE;
 
-	
 	unused_q.head = unused_q.tail = unused_q.size = 0;
 	ready_q.head = ready_q.tail = ready_q.size = 0;
+
 
 	Bzero((char *) &kb, sizeof(kb_t));
 
@@ -56,6 +59,7 @@ void main(void) {                   // kernel boots
 	fill_gate(&intr_table[GET_TIME], (int)Get_TimeEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[WRITE], (int)WriteEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[READ], (int)ReadEntry, get_cs(), ACC_INTR_GATE, 0);
+
 	
 	outportb(PIC_MASK_REG, PIC_MASK);
 
@@ -67,6 +71,5 @@ void main(void) {                   // kernel boots
 
 	Loader(pcb[cur_pid].tf_p); 
 }
-
 
 

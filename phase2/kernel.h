@@ -1,6 +1,5 @@
 // kernel.h, 159, kernel stuff prototyped here
 
-// kernel.h, 159, kernel stuff prototyped here
 
 #ifndef __KERNEL__
 #define __KERNEL__
@@ -28,6 +27,7 @@
 #define STACK_SIZE 4096        // process stack in bytes
 #define Q_SIZE 20              // capacity of a process queue
 #define STR_SIZE 100           // string size max
+
 
 // prog logic stuff
 #define TRUE 1
@@ -63,12 +63,14 @@ typedef struct {
    q_t wait_q;
 } kb_t;
 
+
 // kernel data are all declared in boot.c during bootstrap
 extern int cur_pid;                 // PID currently selected as running process
 extern unsigned sys_tick;           // counting for a system time
 extern q_t unused_q, ready_q;       // unused PID's and ready-to-run PID's
 extern pcb_t pcb[PROC_SIZE];        // Process Control Blocks
 extern char stack[PROC_SIZE][STACK_SIZE];  // process runtime stacks
+
 extern kb_t kb;
 
 void Swapper(void);
@@ -80,6 +82,5 @@ void WriteChar(char);
 void KbService(char);
 
 #endif
-
 
 

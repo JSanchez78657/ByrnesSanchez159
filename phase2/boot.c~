@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 // boot.c, 159, phase 2
 // TACOS  (Members: Jeff Byrnes, Joel Sanchez)
+=======
+// boot.c, 159, phase 1
+//
+// Team Name: ??????? (Members: ??????...)
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 
 #include "spede.h"
 #include "kernel.h"
@@ -13,7 +19,10 @@ int cur_pid;
 pcb_t pcb[PROC_SIZE];
 char stack[PROC_SIZE][STACK_SIZE];
 q_t unused_q, ready_q;
+<<<<<<< HEAD
 kb_t kb;
+=======
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 
 unsigned int sys_tick;
 struct i386_gate *intr_table;
@@ -23,6 +32,10 @@ void CreateProc(func_p_t funEntry)
  	int next = DeQ(&unused_q);  
 	EnQ(next, &ready_q);
 
+<<<<<<< HEAD
+=======
+	//stack[next] = malloc((size_t)STACK_SIZE);
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 	Bzero(stack[next], STACK_SIZE);	
 	pcb[next].run_tick = 0;
 	pcb[next].total_tick = 0;
@@ -41,26 +54,39 @@ void main(void) {                   // kernel boots
 	sys_tick = 0;
 	intr_table = (struct i386_gate *) INTR_TABLE;
 
+<<<<<<< HEAD
+=======
+	//Bzero((char *) &unused_q, sizeof(q_t));
+	//Bzero((char *) &ready_q, sizeof(q_t));
+	//
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 	
 	unused_q.head = unused_q.tail = unused_q.size = 0;
 	ready_q.head = ready_q.tail = ready_q.size = 0;
 
+<<<<<<< HEAD
 	Bzero((char *) &kb, sizeof(kb_t));
 
+=======
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 	for (i = 0; i < PROC_SIZE; i++)
 	{
 		EnQ(i, &unused_q);
 	}
 	
 	fill_gate(&intr_table[TIMER], (int)TimerEntry, get_cs(), ACC_INTR_GATE, 0);
+<<<<<<< HEAD
 	fill_gate(&intr_table[GET_TIME], (int)Get_TimeEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[WRITE], (int)WriteEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[READ], (int)ReadEntry, get_cs(), ACC_INTR_GATE, 0);
+=======
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
 	
 	outportb(PIC_MASK_REG, PIC_MASK);
 
 	
 	CreateProc(Clock);
+<<<<<<< HEAD
 	CreateProc(Init);
 
 	cur_pid = 0;
@@ -69,11 +95,11 @@ void main(void) {                   // kernel boots
 }
 
 
-/*
 
-during the bootstrap:
+=======
 
-   add 3 new entries into the intr_table, in the corresponding entries
-   Create process Init (after creating Clock)
+	cur_pid = 0;
 
-*/
+	Loader(pcb[cur_pid].tf_p); //I'm not sure if this is correct, just a guess.
+}
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83
