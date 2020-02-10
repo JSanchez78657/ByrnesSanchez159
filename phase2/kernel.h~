@@ -1,0 +1,29 @@
+// kernel.h, 159, kernel stuff prototyped here
+
+reduce TIME_SIZE to 100 for faster process response time
+
+additional constants:
+   GET_TIME 48        // new OS service
+   WRITE 49           // new OS service
+   READ 50            // new OS service
+   STR_SIZE 100       // 100 bytes is max per string
+   CR '\r'            // Carriage Return, ASCII #13
+   LF '\n'            // LineFeed, ASCII #10 (NewLine)
+
+add a new process state WAIT
+
+define a keyboard type (kb_t) tha has:
+   buffer: it has STR_SIZE bytes
+   wait_q: our PID queue type
+} kb_t;
+
+prototype an external data structure 'kb'
+
+prototype 3 new void-returning services with input tf_t *
+      GetTimeService 
+      WriteService (calls WriteChar below)
+      ReadService
+and 2 void-returning subroutines with a char as input
+      WriteChar (also called by TimerService)
+      KbService
+
