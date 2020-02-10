@@ -1,0 +1,4 @@
+*.o
+*.dli
+Makefile
+*.orig
