@@ -1,13 +1,11 @@
 // entry.S, entries to kernel, build process trapframe
 
-/*
+<<<<<<< HEAD
 Just as how TimerEntry is programmed, program the 3 new entries:
    GetTimeEntry
    WriteEntry
    ReadEntry
 =======
-*/
-
 #include <spede/machine/asmacros.h>       // do not use/include "spede.h"
 
 #define KERNEL_STACK_SIZE 32768           // 32 KB should be enough
@@ -34,4 +32,4 @@ ENTRY(TimerEntry)           // push efl, cs, eip by hardware
    cld                      // clear direction flag bit
    call CNAME(TimerService) // call C function code
 
-
+>>>>>>> 4239b4c0f2b9d21e192cb0faad8f32c0d7401d83

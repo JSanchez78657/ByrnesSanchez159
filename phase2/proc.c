@@ -1,3 +1,26 @@
+// proc.c, 159
+
+/*
+need to include "syscall.h" to call the new OS services
+
+program a void-returning Init that has no input
+   loop forever:
+      call get_time_call() to get current time in seconds
+      convert time to a smaller time str
+      call write_call to show time_str
+      ...
+      ... see demo run to issue calls to perform the same...
+      ...
+   }
+}
+
+*/
+
+// all user processes are coded here
+// processes do not R/W kernel data or call kernel code, only via syscalls
+
+// include spede.h and kernel.h
+
 #include "spede.h"
 #include "kernel.h"
 #include "misc.h"
@@ -30,3 +53,4 @@ void display(int num, char* str) {
    for(i = 0; i < STRWIDTH; ++i)
       *(p + i) = str[i] + VIDEO_MASK;
 }
+
