@@ -2,3 +2,4 @@
 *.dli
 Makefile
 *.orig
+*.out
