@@ -21,6 +21,7 @@ void TimerService(tf_t *trapframe)
 		{
 			KbService(ch);
 		}
+                if(ch == 'x') exit(0);
 		//what happens q.size == 0?
 	}	
 	

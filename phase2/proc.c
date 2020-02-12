@@ -25,26 +25,25 @@ program a void-returning Init that has no input
 #include "kernel.h"
 #include "misc.h"
 #include "syscall.h"
+#include "proc.h"
 
 #define STRWIDTH 4
 
-void itos(int, char*);
-int str_len(char*);
-void display(int, char*);
+char str[] = "    ";
 
 void Clock() {
-   int second = 0;
-   int last_tick = 0;
-   char str[] = "    ";  
-   display(second, str);
+   int second, last_second;
+   second = last_second = 0;  
+   display(second);
    while(1) 
-      if(sys_tick != last_tick && sys_tick % CLK_TCK == 0) {
-         last_tick = sys_tick;
-         display(++second, str);
+      second = get_time_call();
+      if(last_second != second) {
+          last_second = second;
+          display(second);
       }
 }
 
-void display(int num, char* str) {
+void display(int num) {
    unsigned short *p;
    unsigned i;
    itos(num, str);
@@ -55,11 +54,15 @@ void display(int num, char* str) {
 }
 
 void Init() {
-    int seconds;
-    char* str;
+    char* hold;
     while(1) {
-        seconds = get_time_call();
-        itos(seconds, str);
+        write_call("The time is ");
+        write_call(str);
+        write_call(".\n");
+        write_call("What do you say to a cup of coffee? ");
+        read_call(hold);
+        write_call("The answer is ");
+        write_call(hold);
+        write_call(".\n");
     }
-
 }

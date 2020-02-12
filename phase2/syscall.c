@@ -32,12 +32,12 @@ char read_call(char *str) {
     char ch;
     asm("movl %0, %%eax;
 	int $50"
-	: "g" ((int)str)
+	: "=g" ((int)str)
 	:
-	:"eax"
+	: "eax"
     );
 
-    retun ch;
+    return ch;
 }
 
 
