@@ -4,7 +4,7 @@
 #define __PROC__
 
 void Clock(void);      // PID 0
-void display(int, char *);
+void display(int);
 void Init(void);
 
 #endif

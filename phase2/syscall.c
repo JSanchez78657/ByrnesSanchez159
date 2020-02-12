@@ -27,17 +27,17 @@ void write_call(char *str) {
 
 //program read_call()...
 
-/*
-char read_call(char *str) {
-    char ch;
+
+void read_call(char *str) {
+   
     asm("movl %0, %%eax;
 	int $50"
-	:"g" ((int)str)
 	:
-	:"eax"
+	: "g" ((int)str)
+	: "eax"
     );
 
-    retun ch;
+   
 }
-*/
+
 
