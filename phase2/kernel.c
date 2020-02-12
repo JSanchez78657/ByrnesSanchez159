@@ -21,7 +21,7 @@ void TimerService(tf_t *trapframe)
 		{
 			KbService(ch);
 		}
-                if(ch == 'x') exit(0);
+                //if(ch == 'x') exit(0);
 		//what happens q.size == 0?
 	}	
 	
@@ -69,23 +69,42 @@ void WriteService(tf_t *tf_p)
 
 void WriteChar(char ch)
 {
-
-	static unsigned *cursor = (unsigned *) VIDEO_START;
-	if ((ch != CR) && (ch != LF))
+	/*static unsigned *cursor = (unsigned *) VIDEO_START;
+        if((ch != CR) && (ch != LF))
+        {
+            *cursor = ch + VIDEO_MASK;
+            ++cursor;
+        }
+        else
+        {
+                for(;cursor < CORNER; cursor++)
+                {
+                    *cursor = ' ' + VIDEO_MASK;
+                }
+        }
+        if(cursor == (unsigned *)(CORNER * ROWS))
+        {
+            cursor = (unsigned *)VIDEO_START;
+        }*/
+        static unsigned *cursor = (unsigned *) VIDEO_START;
+        static unsigned row = 1;
+        printf("%c",ch);
+        if(ch == CR || ch == LF) {
+            for (; cursor < (unsigned *)(VIDEO_START + CORNER * row); cursor++)
+                *cursor = ' ' + VIDEO_MASK;
+            ++row;
+        }
+        else    
 	{
-		*cursor = ch + VIDEO_MASK;
-		++cursor;
+            *cursor = ch + VIDEO_MASK;
+            ++cursor;
+            if(cursor > (unsigned *)(VIDEO_START + CORNER * row)) 
+                ++row;
 	}
-	else
-	{
-		for ( ; cursor < CORNER; cursor++)
-		{
-			*cursor = ' ' + VIDEO_MASK;	
-		}
-	}
-	if (cursor == (unsigned *)(CORNER * ROWS))
+	if (cursor == (unsigned *)(VIDEO_START + CORNER * ROWS))
 	{
 		cursor = (unsigned *) VIDEO_START;
+                row = 1;
 	}
 }
 

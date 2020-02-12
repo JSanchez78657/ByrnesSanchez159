@@ -33,22 +33,21 @@ char str[] = "    ";
 
 void Clock() {
    int second, last_second;
-   second = last_second = 0;  
+   second = last_second = 0; 
    display(second);
-   while(1) 
+   while(1){ 
       second = get_time_call();
       if(last_second != second) {
           last_second = second;
           display(second);
       }
+   }
 }
 
 void display(int num) {
-   unsigned short *p;
+   static unsigned short *p = (unsigned short*)VIDEO_START + CORNER - STRWIDTH;
    unsigned i;
    itos(num, str);
-   p = (unsigned short *)VIDEO_START;
-   p += CORNER;
    for(i = 0; i < STRWIDTH; ++i)
       *(p + i) = str[i] + VIDEO_MASK;
 }
@@ -58,11 +57,11 @@ void Init() {
     while(1) {
         write_call("The time is ");
         write_call(str);
-        write_call(".\n");
+        write_call(".\r\n");
         write_call("What do you say to a cup of coffee? ");
         read_call(hold);
         write_call("The answer is ");
         write_call(hold);
-        write_call(".\n");
+        write_call(".\r\n");
     }
 }
