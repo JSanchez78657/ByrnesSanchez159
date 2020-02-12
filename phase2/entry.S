@@ -45,7 +45,7 @@ ENTRY(GetTimeEntry)
 
 ENTRY(WriteEntry)
 	pushal
-	moval %esp, %ecx
+	movl %esp, %ecx
 	leal kernel_stack+KERNEL_STACK_SIZE, %esp
 	pushl %ecx
 	cld
@@ -53,7 +53,7 @@ ENTRY(WriteEntry)
 
 ENTRY(ReadEntry)
 	pushal
-	moval %esp, %ecx
+	movl %esp, %ecx
 	leal kernel_stack+KERNEL_STACK_SIZE, %esp
 	pushl %ecx
 	cld

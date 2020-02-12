@@ -12,6 +12,9 @@ __BEGIN_DECLS
 
 void TimerEntry(void);     // coded in entry.S, assembler won't like this syntax
 void Loader(tf_t *);       // coded in entry.S
+void GetTimeEntry(void);
+void WriteEntry(void);
+void ReadEntry(void);
 
 __END_DECLS
 

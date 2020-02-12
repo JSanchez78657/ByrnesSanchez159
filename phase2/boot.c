@@ -67,7 +67,7 @@ void main(void) {                   // kernel boots
 	CreateProc(Clock);
 	CreateProc(Init);
 
-	cur_pid = 0;
+	cur_pid = DeQ(&ready_q);
 
 	Loader(pcb[cur_pid].tf_p); 
 }

@@ -26,7 +26,6 @@ program a void-returning Init that has no input
 #include "misc.h"
 #include "syscall.h"
 
-#define CORNER 75
 #define STRWIDTH 4
 
 void itos(int, char*);
@@ -60,5 +59,7 @@ void Init() {
     char* str;
     while(1) {
         seconds = get_time_call();
-        itos(str, seconds);
+        itos(seconds, str);
+    }
+
 }

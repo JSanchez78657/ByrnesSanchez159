@@ -56,11 +56,11 @@ void GetTimeService(tf_t *tf_p)
 
 void WriteService(tf_t *tf_p)
 {
-	char *ch = tf_p->eax;
+	char *ch = (char *) tf_p->eax;
 	while (*ch)
 	{
 		WriteChar(*ch);
-		ch++
+		ch++;
 	}	
 	Loader(tf_p);
 }
@@ -70,7 +70,7 @@ void WriteChar(char ch)
 {
 
 	static unsigned *cursor = (unsigned *) VIDEO_START;
-	if ((ch != CR) && (ch != NL))
+	if ((ch != CR) && (ch != LF))
 	{
 		*cursor = ch + VIDEO_MASK;
 		++cursor;
@@ -79,10 +79,10 @@ void WriteChar(char ch)
 	{
 		for ( ; cursor < CORNER; cursor++)
 		{
-			*curosr = ' ' + VIDEO_MASK;	
+			*cursor = ' ' + VIDEO_MASK;	
 		}
 	}
-	if (cursor == (unsigned *)(CORNER * ROWS)
+	if (cursor == (unsigned *)(CORNER * ROWS))
 	{
 		cursor = (unsigned *) VIDEO_START;
 	}
@@ -94,7 +94,7 @@ void ReadService(tf_t *tf_p)
 	pcb[cur_pid].tf_p = tf_p;
 	
 
-	EnQ(cur_pid, kb.wait_q);
+	EnQ(cur_pid, &kb.wait_q);
 	pcb[cur_pid].state = WAIT;
 	cur_pid = -1;
 
@@ -110,17 +110,17 @@ void KbService(char ch)
 	int release_pid;
 
 	WriteChar(ch);
-	if ((ch != CR) && (ch != NL))
+	if ((ch != CR) && (ch != LF))
 	{
 		StrAdd(kb.buffer, ch);
 	}
 	else
 	{
 		StrAdd(kb.buffer, '\0');
-		release_pid = DeQ(kb.wait_q);
-		StrCpy(kb.buffer, pcb[cur_pid].tf_p->eax);
+		release_pid = DeQ(&kb.wait_q);
+		StrCpy(kb.buffer, (char *) pcb[cur_pid].tf_p->eax);
 		pcb[release_pid].state = READY;
-		EnQ(release_pid, ready_q);
+		EnQ(release_pid, &ready_q);
 		Bzero(kb.buffer, STR_SIZE);
 	}
 }
