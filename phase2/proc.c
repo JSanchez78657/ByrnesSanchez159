@@ -63,5 +63,6 @@ void Init() {
         write_call("The answer is ");
         write_call(hold);
         write_call(".\r\n");
+	Bzero(&hold, STR_SIZE);
     }
 }

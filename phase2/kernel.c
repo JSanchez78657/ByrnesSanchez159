@@ -65,7 +65,8 @@ void WriteService(tf_t *tf_p)
 	{
 		WriteChar(*ch);
 		ch++;
-	}	
+	}
+	//Bzero(tf_p->eax, STR_SIZE);	
 	Loader(tf_p);
 }
 
