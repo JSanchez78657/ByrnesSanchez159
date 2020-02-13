@@ -37,13 +37,13 @@ int DeQ(q_t *myQ)
 	if (!QisEmpty(myQ))
 	{
 		int temp = myQ->q[myQ->head];
-		++myQ->head;
+		myQ->head = (myQ->head + 1) % Q_SIZE;
 		--myQ->size;
 		return temp;
 	}
 	else
 	{
-		return 0;
+		return NA;
 	}
 }
 

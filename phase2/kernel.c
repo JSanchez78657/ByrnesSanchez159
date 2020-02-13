@@ -77,9 +77,9 @@ void WriteChar(char ch)
 	static unsigned short *cursor = (unsigned short *) VIDEO_START;
 	int i;	
 
-	if ((((unsigned) cursor - VIDEO_START ) % CORNER) == 0)
+	if ((((unsigned) cursor - VIDEO_START ) % (CORNER * 2)) == 0)
 	{
-		for (i = 0; i < CORNER * 2; i++)
+		for (i = 0; i < CORNER; i++)
 		{
 			*(cursor + i) = ' ' + VIDEO_MASK;
 		}
@@ -93,14 +93,14 @@ void WriteChar(char ch)
 
 	else
 	{
-		while ((((unsigned) cursor - VIDEO_START) % CORNER) != 0)
+		while ((((unsigned) cursor - VIDEO_START) % (CORNER * 2)) != 0)
 		{
 			*cursor = ' ' + VIDEO_MASK;
 			++cursor;
 		}
 	}
 
-	if (((unsigned) cursor - VIDEO_START) % (CORNER * ROWS) == 0)
+	if (((unsigned) cursor - VIDEO_START) % ((CORNER * ROWS) * 2) == 0)
 	{
 		cursor = (unsigned short *) VIDEO_START;
 	}

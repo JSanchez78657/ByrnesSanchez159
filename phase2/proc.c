@@ -57,12 +57,12 @@ void Init() {
     while(1) {
         write_call("The time is ");
         write_call(str);
-        write_call(".\r\n");
+        write_call(".\n");
         write_call("What do you say to a cup of coffee? ");
         read_call(hold);
         write_call("The answer is ");
         write_call(hold);
-        write_call(".\r\n");
+        write_call(".\n");
 	Bzero(hold, STR_SIZE);
     }
 }
