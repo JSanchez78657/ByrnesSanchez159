@@ -8,6 +8,7 @@
 #include "misc.h"
 #include "entry.h"
 
+
 void TimerService(tf_t *trapframe)
 {
 	char ch;
@@ -69,43 +70,40 @@ void WriteService(tf_t *tf_p)
 
 void WriteChar(char ch)
 {
-	/*static unsigned *cursor = (unsigned *) VIDEO_START;
-        if((ch != CR) && (ch != LF))
-        {
-            *cursor = ch + VIDEO_MASK;
-            ++cursor;
-        }
-        else
-        {
-                for(;cursor < CORNER; cursor++)
-                {
-                    *cursor = ' ' + VIDEO_MASK;
-                }
-        }
-        if(cursor == (unsigned *)(CORNER * ROWS))
-        {
-            cursor = (unsigned *)VIDEO_START;
-        }*/
-        static unsigned *cursor = (unsigned *) VIDEO_START;
-        static unsigned row = 1;
-        printf("%c",ch);
-        if(ch == CR || ch == LF) {
-            for (; cursor < (unsigned *)(VIDEO_START + CORNER * row); cursor++)
-                *cursor = ' ' + VIDEO_MASK;
-            ++row;
-        }
-        else    
+
+	static unsigned short *cursor = (unsigned short *) VIDEO_START;
+	int i;	
+
+	if ((((unsigned) cursor - VIDEO_START ) % CORNER) == 0)
 	{
-            *cursor = ch + VIDEO_MASK;
-            ++cursor;
-            if(cursor > (unsigned *)(VIDEO_START + CORNER * row)) 
-                ++row;
+		for (i = 0; i < CORNER; i++)
+		{
+			*(cursor + i) = ' ' + VIDEO_MASK;
+		}
 	}
-	if (cursor == (unsigned *)(VIDEO_START + CORNER * ROWS))
+
+	if (ch != CR && ch != LF)
 	{
-		cursor = (unsigned *) VIDEO_START;
-                row = 1;
+		*cursor = ch + VIDEO_MASK;
+		++cursor;
 	}
+
+	else
+	{
+		while (((unsigned) cursor - VIDEO_START) < CORNER)
+		{
+			*cursor = ' ' + VIDEO_MASK;
+			++cursor;
+		}
+	}
+
+	if (((unsigned) cursor - VIDEO_START) % (CORNER * ROWS) == 0)
+	{
+		cursor = (unsigned short *) VIDEO_START;
+	}
+        
+
+	
 }
 
 
@@ -138,7 +136,7 @@ void KbService(char ch)
 	{
 		StrAdd(kb.buffer, '\0');
 		release_pid = DeQ(&kb.wait_q);
-		StrCpy(kb.buffer, (char *) pcb[cur_pid].tf_p->eax);
+		StrCpy(kb.buffer, (char *) pcb[release_pid].tf_p->eax);
 		pcb[release_pid].state = READY;
 		EnQ(release_pid, &ready_q);
 		Bzero(kb.buffer, STR_SIZE);
