@@ -93,7 +93,7 @@ void WriteChar(char ch)
 
 	else
 	{
-		while (((unsigned) cursor - VIDEO_START) < CORNER * 2)
+		while ((((unsigned) cursor - VIDEO_START) % CORNER) != 0)
 		{
 			*cursor = ' ' + VIDEO_MASK;
 			++cursor;
