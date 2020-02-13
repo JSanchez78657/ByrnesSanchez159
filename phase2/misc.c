@@ -98,8 +98,8 @@ void itos(int i, char* s) {
 
 void StrAdd(char* str, char c) {
     int len = str_len(str);
-    str[len] = '\0';
-    str[len-1] = c;
+    str[len+1] = '\0';
+    str[len] = c;
 }
 
 void StrCpy(char* inStr, char* destStr) {

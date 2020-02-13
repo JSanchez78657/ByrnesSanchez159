@@ -24,6 +24,8 @@ void TimerService(tf_t *trapframe)
 		}
                 //if(ch == 'x') exit(0);
 		//what happens q.size == 0?
+
+			
 	}	
 	
 	outportb(PIC_CONTROL_REG, TIMER_ACK);
@@ -76,7 +78,7 @@ void WriteChar(char ch)
 
 	if ((((unsigned) cursor - VIDEO_START ) % CORNER) == 0)
 	{
-		for (i = 0; i < CORNER; i++)
+		for (i = 0; i < CORNER * 2; i++)
 		{
 			*(cursor + i) = ' ' + VIDEO_MASK;
 		}
@@ -90,7 +92,7 @@ void WriteChar(char ch)
 
 	else
 	{
-		while (((unsigned) cursor - VIDEO_START) < CORNER)
+		while (((unsigned) cursor - VIDEO_START) < CORNER * 2)
 		{
 			*cursor = ' ' + VIDEO_MASK;
 			++cursor;

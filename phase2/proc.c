@@ -53,7 +53,7 @@ void display(int num) {
 }
 
 void Init() {
-    char* hold;
+    char hold[STR_SIZE];
     while(1) {
         write_call("The time is ");
         write_call(str);
