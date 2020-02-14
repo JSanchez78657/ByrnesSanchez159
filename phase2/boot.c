@@ -27,11 +27,12 @@ void CreateProc(func_p_t funEntry)
 
 
 	Bzero(stack[next], STACK_SIZE);	
+	Bzero((char*) &pcb[next], sizeof(pcb_t));
+
 	pcb[next].run_tick = 0;
 	pcb[next].total_tick = 0;
 	pcb[next].state = READY;
-	
-	Bzero((char*) &pcb[next], sizeof(pcb_t));
+		
 
 	pcb[next].tf_p = (tf_t *) &stack[next][STACK_SIZE - sizeof(tf_t)];
 	pcb[next].tf_p->efl = FLAGS;

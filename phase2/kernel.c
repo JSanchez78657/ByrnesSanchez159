@@ -41,7 +41,7 @@ void TimerService(tf_t *trapframe)
 		cur_pid = -1;
 	}		
 
-	if (cur_pid == -1)
+	if (cur_pid == NA)
 	{
 		Swapper();
 	}
@@ -61,12 +61,13 @@ void GetTimeService(tf_t *tf_p)
 void WriteService(tf_t *tf_p)
 {
 	char *ch = (char *) tf_p->eax;
+	
 	while (*ch)
 	{
 		WriteChar(*ch);
 		ch++;
 	}
-	//Bzero(tf_p->eax, STR_SIZE);	
+	//Bzero((char *)tf_p->eax, len);	
 	Loader(tf_p);
 }
 
