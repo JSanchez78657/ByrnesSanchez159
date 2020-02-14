@@ -91,4 +91,6 @@ void StrCpy(char* inStr, char* destStr) {
     int i;
     for(i = 0; i < len; ++i)
         destStr[i] = inStr[i];
+    destStr[len] = '\0';
+
 }

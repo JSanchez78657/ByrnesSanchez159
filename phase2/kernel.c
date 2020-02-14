@@ -94,11 +94,14 @@ void WriteChar(char ch)
 
 	else
 	{
+		
 		while ((((unsigned) cursor - VIDEO_START) % (CORNER * 2)) != 0)
 		{
 			*cursor = ' ' + VIDEO_MASK;
 			++cursor;
 		}
+
+		//cursor += CORNER - ((unsigned) cursor - VIDEO_START) % (CORNER);
 	}
 
 	if (((unsigned) cursor - VIDEO_START) % ((CORNER * ROWS) * 2) == 0)
