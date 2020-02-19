@@ -15,6 +15,9 @@ void Loader(tf_t *);       // coded in entry.S
 void GetTimeEntry(void);
 void WriteEntry(void);
 void ReadEntry(void);
+void GetPidEntry(void);
+void ForkEntry(void);
+void ExitEntry(void);
 
 __END_DECLS
 
