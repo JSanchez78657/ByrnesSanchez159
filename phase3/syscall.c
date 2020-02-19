@@ -40,4 +40,30 @@ void read_call(char *str) {
    
 }
 
+int get_pid_call(void){
+    int pid;
+
+    asm("int $51;
+	 movl %%eax, %0"
+	:"=g" (pid)
+	:
+	: "eax"
+    );
+
+	return pid;
+}
+
+void exit_call(void){
+    asm("int $52");
+}
+
+int fork_call(void){
+    int fork_return;
+
+    asm("int $53;
+	movl %%eax, %0"
+	: "=g" (fork_return)
+	:
+	: "eax"
+    );
 

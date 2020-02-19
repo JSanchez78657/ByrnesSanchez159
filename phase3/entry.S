@@ -59,4 +59,28 @@ ENTRY(ReadEntry)
 	cld
 	call CNAME(ReadService)
 
+ENTRY(GetPidEntry)
+	pushal
+	movl %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(GetPidService)
+
+ENTRY(ExitEntry)
+	pushal
+	movl %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(ExitService)
+
+ENTRY(ForkEntry)
+	pushal
+	movl %esp, %ecx
+	leal kernel_stack+KERNEL_STACK_SIZE, %esp
+	pushl %ecx
+	cld
+	call CNAME(ForkService)
+
 

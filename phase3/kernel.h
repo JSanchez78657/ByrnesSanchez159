@@ -13,6 +13,10 @@
 #define GET_TIME 48            // get_time event code
 #define WRITE 49               // write event code
 #define READ 50                // read event code
+#define GET_PID 51
+#define EXIT 52
+#define FORK 53
+#define CONSOLE 99
 
 #define PIC_MASK_REG 0x21      // I/O # of PIC mask register
 #define PIC_MASK ~0x01         // mask value for PIC mask
@@ -53,6 +57,7 @@ typedef struct {
    state_t state;            // state of process
    unsigned run_tick, total_tick; // runtime of process and lifespan
    tf_t *tf_p;               // points to proc's trapframe
+   int stdin, stdout, ppid;
 } pcb_t;                     
 
 typedef struct {             // circular queue
@@ -80,6 +85,9 @@ void TimerService(tf_t *);
 void GetTimeService(tf_t *);
 void WriteService(tf_t *);
 void ReadService(tf_t *);
+void GetPidService(tf_t *);
+void ExitService(void);
+void ForkService(tf_t *);
 void WriteChar(char);
 void KbService(char);
 

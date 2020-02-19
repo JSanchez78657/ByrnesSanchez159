@@ -17,7 +17,7 @@ void TimerService(tf_t *trapframe)
 	if (cons_kbhit())
 	{
 		ch = cons_getchar();
-		if (ch == 'g') breakpoint();
+		if (ch == 'G') breakpoint();
 		else if (kb.wait_q.size != 0)
 		{
 			KbService(ch);
@@ -150,6 +150,69 @@ void KbService(char ch)
 	}
 }
 		
+void GetPidService(tf_t *tf_p)
+{
+	tf_p->eax = cur_pid;
+	Loader(tf_p);
+}
+
+void ExitService(void)
+{
+	Bzero((char*) &pcb[cur_pid], sizeof(pcb_t));
+	pcb[cur_pid].state = UNUSED;
+	EnQ(cur_pid, &unused_q);
+	cur_pid = NA;
+	Swapper();
+	Loader(pcb[cur_pid].tf_p);
+}
+
+void ForkService(tf_t *tf_p)
+{
+	pcb[cur_pid].tf_p = tf_p;	
+
+	int child_pid;
+	int distance;
+	int *old_ebp;
+
+	child_pid = DeQ(&unused_q);
+
+	if (child_pid == NA)
+	{
+		tf_p->eax = NA;
+		Loader(tf_p);
+	}
+	
+	EnQ(child_pid, &ready_q);
+	
+	pcb[child_pid] = pcb[cur_pid];
+	pcb[child_pid].state = READY;
+	pcb[child_pid].ppid = cur_pid;
+	pcb[child_pid].run_tick = pcb[child_pid].total_tick = 0;
+	MemCpy((char *) stack[cur_pid], (char *) stack[child_pid], sizeof(char *));
+	distance = ((char *)stack[cur_pid] - (char *)stack[child_pid]);
+	
+	//unsure if we need to 
+	pcb[child_pid].tf_p = pcb[cur_pid].tf_p + distance;
+	pcb[child_pid].tf_p->ebp += distance; 	
+
+	next_ebp = pcb[child_pid].tf_p->ebp;
+
+	//brain rape
+	while (*next_ebp != NUL)
+	{
+		*next_ebp += distance;
+		next_ebp = (char *) *next_ebp;
+	}
+
+	pcb[cur_pid].tf_p->eax = child_pid;
+	pcb[child_pid].tf_p->eax = 0;
+
+	Loader(pcb[cur_pid].tf_p);
+}
+	
+	
+		
+
 
 void Swapper()
 {
@@ -165,4 +228,6 @@ void Swapper()
 		pcb[cur_pid].state = RUN;
 	}				
 }
+
+
 

@@ -38,6 +38,10 @@ void CreateProc(func_p_t funEntry)
 	pcb[next].tf_p->efl = FLAGS;
 	pcb[next].tf_p->cs = CS;
 	pcb[next].tf_p->eip = (unsigned) funEntry;
+
+	pcb[next].stdin = CONSOLE;
+	pcb[next].stdout = CONSOLE;
+
 }
 
 void main(void) {                   // kernel boots
@@ -60,13 +64,15 @@ void main(void) {                   // kernel boots
 	fill_gate(&intr_table[GET_TIME], (int)GetTimeEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[WRITE], (int)WriteEntry, get_cs(), ACC_INTR_GATE, 0);
 	fill_gate(&intr_table[READ], (int)ReadEntry, get_cs(), ACC_INTR_GATE, 0);
-
+	fill_gate(&intr_table[GET_PID], (int)GetPitEntry, get_cs(), ACC_INTR_GATE,0);
+	fill_gate(&intr_table[EXIT], (int)ExitEntry, get_cs(), ACC_INTR_GATE, 0);
+	fill_gate(&intr_table[FORK], (int)ForkEntry, get_cs(), ACC_INTR_GATE, 0);
 	
 	outportb(PIC_MASK_REG, PIC_MASK);
 
 	
 	CreateProc(Clock);
-	CreateProc(Init);
+	CreateProc(Shell);
 
 	cur_pid = DeQ(&ready_q);
 
