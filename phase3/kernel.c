@@ -168,12 +168,13 @@ void ExitService(void)
 
 void ForkService(tf_t *tf_p)
 {
-	pcb[cur_pid].tf_p = tf_p;	
 
 	int child_pid;
 	int distance;
-	int *old_ebp;
+	int *next_ebp;
 
+	pcb[cur_pid].tf_p = tf_p;	
+	
 	child_pid = DeQ(&unused_q);
 
 	if (child_pid == NA)
