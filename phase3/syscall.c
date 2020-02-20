@@ -67,3 +67,5 @@ int fork_call(void){
 	: "eax"
     );
 
+    return fork_return;
+}

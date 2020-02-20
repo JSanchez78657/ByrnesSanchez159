@@ -73,15 +73,15 @@ void Shell() {
         write_call("\n");
         if(StrCmp(cmd_str, "exit")) {
             write_call("(");
-            write_call(my_pid);
+            write_call(pid_str);
             write_call(") exiting.\n");
             exit_call();
         }
         if(StrCmp(cmd_str, "fork")) {
             ret = fork_call();
             if(ret == NA) write_call("fork failed!\n");
-            else if(ret == 0) write_call("I'm a new child process.\n");
-            else write_call("I'm a parent process");
+            //else write_call("I'm a new child process.\n");
+            else if (ret >= 0) write_call("I'm a parent process\n");
         }
     }
 }

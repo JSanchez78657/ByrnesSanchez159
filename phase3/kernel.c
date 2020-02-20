@@ -121,7 +121,7 @@ void ReadService(tf_t *tf_p)
 
 	EnQ(cur_pid, &kb.wait_q);
 	pcb[cur_pid].state = WAIT;
-	cur_pid = -1;
+	cur_pid = NA;
 
 	Swapper();
 	Loader(pcb[cur_pid].tf_p);
@@ -170,8 +170,8 @@ void ForkService(tf_t *tf_p)
 {
 
 	int child_pid;
-	int distance;
-	int *next_ebp;
+	unsigned distance, temp;
+	char *next_ebp;
 
 	pcb[cur_pid].tf_p = tf_p;	
 	
@@ -189,22 +189,25 @@ void ForkService(tf_t *tf_p)
 	pcb[child_pid].state = READY;
 	pcb[child_pid].ppid = cur_pid;
 	pcb[child_pid].run_tick = pcb[child_pid].total_tick = 0;
-	MemCpy((char *) stack[cur_pid], (char *) stack[child_pid], sizeof(char *));
-	distance = ((char *)stack[cur_pid] - (char *)stack[child_pid]);
+	MemCpy((char *)stack[cur_pid], (char *)stack[child_pid], sizeof(char *));
+
+	distance = (stack[cur_pid] - stack[child_pid]);
 	
 	//unsure if we need to 
-	pcb[child_pid].tf_p = pcb[cur_pid].tf_p + distance;
-	pcb[child_pid].tf_p->ebp += distance; 	
+	pcb[child_pid].tf_p = (pcb[cur_pid].tf_p + distance);
+	pcb[child_pid].tf_p->ebp += distance;
+	//cons_printf("%x\n", pcb[child_pid].tf_p->ebp); 	
 
-	next_ebp = pcb[child_pid].tf_p->ebp;
+	next_ebp = (char *)pcb[child_pid].tf_p->ebp;
 
+	/*
 	//brain rape
 	while (*next_ebp != NUL)
 	{
-		*next_ebp += distance;
-		next_ebp = (char *) *next_ebp;
+		*next_ebp = (*next_ebp + distance);
+		next_ebp = (char *)*next_ebp;
 	}
-
+	*/
 	pcb[cur_pid].tf_p->eax = child_pid;
 	pcb[child_pid].tf_p->eax = 0;
 
