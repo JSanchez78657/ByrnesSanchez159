@@ -66,6 +66,8 @@ void Shell() {
         write_call(pid_str);
         write_call(") TACOS-> ");
         read_call(cmd_str);
+        my_pid = get_pid_call();
+        itos(my_pid, pid_str);
         write_call("(");
         write_call(pid_str);
         write_call(") got input:");

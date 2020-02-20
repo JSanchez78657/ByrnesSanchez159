@@ -171,7 +171,7 @@ void ForkService(tf_t *tf_p)
 
 	int child_pid;
 	unsigned distance, temp;
-	char *next_ebp;
+	int *next_ebp;
 
 	pcb[cur_pid].tf_p = tf_p;	
 	
@@ -193,22 +193,19 @@ void ForkService(tf_t *tf_p)
 
 	distance = (stack[child_pid] - stack[cur_pid]);
 	
-	
 	pcb[child_pid].tf_p = (tf_t *)((char *)pcb[cur_pid].tf_p + distance);
 	pcb[child_pid].tf_p->ebp += distance;
 	
+        next_ebp = (int *) pcb[child_pid].tf_p->ebp;
 
-	next_ebp = (char *)pcb[child_pid].tf_p->ebp;
+        while(*next_ebp != NUL) {
+            *next_ebp += distance;
+            next_ebp = *next_ebp;
+        }
 
-	/*
-	//brain rape
-	while (*next_ebp != NUL)
-	{
-		*next_ebp = (*next_ebp + distance);
-		next_ebp = (char *)*next_ebp;
-	}
-	*/
-	pcb[cur_pid].tf_p->eax = child_pid;
+
+
+        pcb[cur_pid].tf_p->eax = child_pid;
 	pcb[child_pid].tf_p->eax = 0;
 
 	Loader(pcb[cur_pid].tf_p);
