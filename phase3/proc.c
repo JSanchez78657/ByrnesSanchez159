@@ -45,7 +45,6 @@ void Init() {
 
 int StrCmp(char* a, char* b) {
     int i;
-    int ret = TRUE;
     for(i = 0; a[i] != '\0' && b[i] != '\0' && a[i] == b[i]; ++i); 
     return (a[i] == b[i]) ? TRUE : FALSE;
 }
@@ -68,7 +67,7 @@ void Shell() {
         write_call(") TACOS-> ");
         read_call(cmd_str);
         write_call("(");
-        write_call(my_pid);
+        write_call(pid_str);
         write_call(") got input:");
         write_call(cmd_str);
         write_call("\n");
@@ -81,7 +80,7 @@ void Shell() {
         if(StrCmp(cmd_str, "fork")) {
             ret = fork_call();
             if(ret == NA) write_call("fork failed!\n");
-            else (ret == 0) write_call("I'm a new child process.\n");
+            else if(ret == 0) write_call("I'm a new child process.\n");
             else write_call("I'm a parent process");
         }
     }
