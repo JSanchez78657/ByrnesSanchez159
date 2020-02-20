@@ -80,8 +80,8 @@ void Shell() {
         if(StrCmp(cmd_str, "fork")) {
             ret = fork_call();
             if(ret == NA) write_call("fork failed!\n");
-            //else write_call("I'm a new child process.\n");
-            else if (ret >= 0) write_call("I'm a parent process\n");
+            else if (ret == 0)write_call("I'm a new child process.\n");
+            else if (ret > 0) write_call("I'm a parent process\n");
         }
     }
 }

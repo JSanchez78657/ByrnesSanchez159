@@ -194,7 +194,7 @@ void ForkService(tf_t *tf_p)
 	distance = (stack[cur_pid] - stack[child_pid]);
 	
 	
-	pcb[child_pid].tf_p = (f_t *)((char *)pcb[cur_pid].tf_p + distance);
+	pcb[child_pid].tf_p = (tf_t *)((char *)pcb[cur_pid].tf_p + distance);
 	pcb[child_pid].tf_p->ebp += distance;
 	
 
