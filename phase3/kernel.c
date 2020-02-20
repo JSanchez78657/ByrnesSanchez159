@@ -189,14 +189,14 @@ void ForkService(tf_t *tf_p)
 	pcb[child_pid].state = READY;
 	pcb[child_pid].ppid = cur_pid;
 	pcb[child_pid].run_tick = pcb[child_pid].total_tick = 0;
-	MemCpy((char *)stack[cur_pid], (char *)stack[child_pid], sizeof(char *));
+	MemCpy((char *)stack[cur_pid], (char *)stack[child_pid], STACK_SIZE);
 
 	distance = (stack[cur_pid] - stack[child_pid]);
 	
-	//unsure if we need to 
-	pcb[child_pid].tf_p = (pcb[cur_pid].tf_p + distance);
+	
+	pcb[child_pid].tf_p = (f_t *)((char *)pcb[cur_pid].tf_p + distance);
 	pcb[child_pid].tf_p->ebp += distance;
-	//cons_printf("%x\n", pcb[child_pid].tf_p->ebp); 	
+	
 
 	next_ebp = (char *)pcb[child_pid].tf_p->ebp;
 
